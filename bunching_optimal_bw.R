@@ -10,6 +10,9 @@ bunching_optimal_bw = function(y, x, bunch_point, n_bins) {
   # bunch_point: the point at which people bunch
   # n_bins: number of bunching bins
   
+  # fixed parameters
+  max_bunch = 2
+  
   # loop over bin combinations
   n_below = floor((n_bins)/10) # number of bins below
   n_above = ceiling((n_bins)/10) # number of bins above

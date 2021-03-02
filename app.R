@@ -86,7 +86,7 @@ server = function(session, input, output) {
   })
   
   # compute bunching estimator
-  estimates = reactive({bunching_estimation(y(), x(), bin_mid(), bw_l(), bw_r(), input$bunch_point)})
+  estimates = reactive({bunching_estimation(y(), x(), bin_mid(), bw_l(), bw_r(), input$bunch_point, input$t_above, input$t_below)})
   
   # create output table
   output$out_table = renderTable({estimates()}, rownames=FALSE)

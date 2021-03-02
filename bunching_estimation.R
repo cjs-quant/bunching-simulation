@@ -1,5 +1,5 @@
 
-bunching_estimation = function(y, x, bin_mid, bw_l, bw_r, bunch_point) {
+bunching_estimation = function(y, x, bin_mid, bw_l, bw_r, bunch_point, t_above, t_below) {
   # DESCRIPTION: 
   # computes bunching estimator and income elasticity 
   # from Chetty (2009) given optimal bandwidths (bw_l, bw_r) 
@@ -12,6 +12,8 @@ bunching_estimation = function(y, x, bin_mid, bw_l, bw_r, bunch_point) {
   # bw_l: number of omitted bins to the left of bin_mid
   # bw_r: number of omitted bins to the right of bin_mid
   # bunch_point: income level of kink
+  # t_above: marginal tax rate right of bunch point
+  # t_below: marginal tax rate left of bunch point
   
   # dummy variables for bunching estimation
   dummies = as.data.frame(matrix(0, nrow(x), (bin_mid+bw_r)-(bin_mid-bw_l) + 1))
