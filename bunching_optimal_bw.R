@@ -1,5 +1,5 @@
 
-bunching_optimal_bw = function(y, x, n_bins) {
+bunching_optimal_bw = function(y, x, bunch_point, n_bins) {
   # DESCRIPTION:
   # takes bunching data and computes optimal bunching window 
   # using algorithm described in Bosch, Dekker, and Strohmaier (2020)
@@ -7,6 +7,7 @@ bunching_optimal_bw = function(y, x, n_bins) {
   # ARGUMENTS
   # y: number of bunchers
   # x: bunching bins
+  # bunch_point: the point at which people bunch
   # n_bins: number of bunching bins
   
   # loop over bin combinations
@@ -15,7 +16,7 @@ bunching_optimal_bw = function(y, x, n_bins) {
   bin_mid = ceiling(n_bins/2)
   run = 1
   
-  # initialize to store results
+  # initialize bw distributions
   results = as.data.frame(matrix(0, nrow=(n_above+1)*(n_below+1), ncol=4))
   colnames(results) = c("left_bw", "right_bw", "left_bw_opt", "right_bw_opt")
   
@@ -90,13 +91,33 @@ bunching_optimal_bw = function(y, x, n_bins) {
     }
   }
   
-  # optimal bw_l, bw_r
+  # replace optimal right bw with NA if false positive (no bunching)
+  results = results[with(results, order(left_bw, right_bw)), ]
+  for (i in 1:(nrow(results)-1)) {
+    if ((results$right_bw_opt[i] == 0) & (results$left_bw[i] == results$left_bw[i+1])) {results$right_bw_opt[i+1] = 0}
+  }
+  
+  # replace optimal left bw with NA if false positive (no bunching)
+  results = results[with(results, order(right_bw, left_bw)), ]
+  for (i in 1:(nrow(results)-1)) {
+    if ((results$left_bw_opt[i] == 0) & (results$right_bw[i] == results$right_bw[i+1])) {results$left_bw[i+1] = 0}
+  }
+  
+  # compute bws
   results$left_bw_opt[results$left_bw_opt == 0] = NA
   results$right_bw_opt[results$right_bw_opt == 0] = NA
   results$left_bw_opt = results$left_bw_opt + results$left_bw
   results$right_bw_opt = results$right_bw_opt + results$right_bw
-  bw_l = median(na.omit(results$left_bw_opt))
-  bw_r = median(na.omit(results$right_bw_opt))
+  
+  # optimal bw_l
+  if (length(na.omit(results$left_bw_opt)) < 11) {
+    bw_l = 0
+  } else {bw_l = median(na.omit(results$left_bw_opt))}
+  
+  # optimal bw_r
+  if (length(na.omit(results$right_bw_opt)) < 11) {
+    bw_r = 0
+  } else {bw_r = median(na.omit(results$right_bw_opt))}
   
   # compute optimal beta
   y_temp = data.matrix(y[-c((bin_mid-bw_l):(bin_mid+bw_r)),])

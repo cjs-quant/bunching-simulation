@@ -38,8 +38,9 @@ bunching_estimation = function(y, x, bin_mid, bw_l, bw_r, bunch_point) {
   bf = bn/(C - bn)
   
   # income elasticity
-  ef = bf/(bunch_point*log((1 - t_below)/(1 - t_above)))
-  estimates = list("bf"=bf, "ef"=ef)
+  ef = bf/(bunch_point*log((1 - t_above)/(1 - t_below)))
+  estimates = cbind(bf, ef)
+  colnames(estimates) = c("Excess Bunching", "Income Elasticity")
   
   return(estimates)
   

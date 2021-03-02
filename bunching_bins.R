@@ -1,13 +1,18 @@
 
-bunching_bins = function(max_bunch, n_bins) {
+bunching_bins = function(x_set, bunch_point, n_bins) {
   # DESCRIPTION:
   # generates n bins along support containing the bunch point 
   # defined by the user, computes the number of observations 
   # within each bin, and coerces into a regressible format
   
   # ARGUMENTS:
+  # x_set: simulated income distribution data
+  # bunch_point: the point at which people bunch
   # max_bunch: the maximum window for bunching
   # n_bins: the number of bins within bunching window
+  
+  # fixed parameters:
+  max_bunch = 2
   
   # compute bins within max bunch range
   x_set = as.data.frame(x_set$x[bunch_point+max_bunch>x_set$x & bunch_point-max_bunch<x_set$x])

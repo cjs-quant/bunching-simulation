@@ -19,8 +19,7 @@ bunching_data_gen = function(bunch_point, n_bunch, variance_bunch) {
   # fixed parameters
   n = 100000
   mean = 10
-  variance = 0.2
-  max_bunch = 2
+  variance = 0.5
   
   # log-normal income draws
   x = as.data.frame(rnorm(n, mean, variance))
